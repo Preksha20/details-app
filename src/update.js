@@ -10,9 +10,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Radio from '@material-ui/core/Radio';
 import Button from '@material-ui/core/Button';
 import history from './history';
-import  { useEffect} from 'react';
-import { Update } from "@material-ui/icons";
-
+import  { useEffect,  } from 'react';
 
 
 
@@ -38,29 +36,27 @@ import { Update } from "@material-ui/icons";
           },   
      }));
 
+var user={};
 
-
-export const Create= props => {
-    const classes = useStyles();
-    const initialInputState = { firstname: "",lastname: "",email: "",gender:"", phone: "", faculty:""};
-    const [eachEntry, setEachEntry] = useState(initialInputState);
-    const {firstname, lastname, email, gender, phone, faculty} = eachEntry;
-    
-  
-    const handleInputChange = e => {
-      setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
-      
-    };
-
-        const onSubmitHandler = (e) => {
-         
-          localStorage.setItem("details", JSON.stringify(eachEntry));
-          history.push('/');
+export const Update= props => {
+        
+       user=JSON.parse(localStorage.getItem('update'));
+      console.log(user);
+      const [eachUpdate, setEachUpdate] = useState(user);
+        const {firstname, lastname, email, gender, phone, faculty} = eachUpdate;
+        const classes = useStyles();
+   
+       const onUpdateHandler = (e) => {
+        localStorage.setItem("updated", JSON.stringify(eachUpdate));
+           history.push('/');
         };
-
+        const handleInputChange = e => {
+            setEachUpdate({ ...eachUpdate, [e.target.name]: e.target.value });
+            
+          };
     return(
       <Box className="Box-container" >
-       <h1 className="App-heading" style={{paddingTop: '10px'}}>Create Information Form </h1> 
+       <h1 className="App-heading" style={{paddingTop: '10px'}}>Update Information Form </h1> 
         <form >
         <TextField className={classes.root} id="standard-basic" label="First Name" name="firstname" value={firstname} onChange={handleInputChange} />
        <TextField className={classes.root} id="standard-basic" label="Last Name" name="lastname" value={lastname} onChange={handleInputChange}/>
@@ -75,11 +71,10 @@ export const Create= props => {
         <TextField className={classes.root} id="standard-basic" label="Phone" name="phone" value={phone} onChange={handleInputChange}/>
         <TextField className={classes.root} id="standard-basic" label="Faculty" name="faculty" value={faculty} onChange={handleInputChange}/>
         <br></br>
-        <Button  variant="contained"  style={{margin:'25px 10px 10px 16px'}} onClick={onSubmitHandler}>Submit</Button>
+        <Button  variant="contained"  style={{margin:'25px 10px 10px 16px'}} onClick={onUpdateHandler}>Update</Button>
        </form>
        </Box>
   );
 }
-export default Create;
-
+export default Update;
 
