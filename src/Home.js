@@ -15,6 +15,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 
+
 const ColorButton = withStyles(() => ({
   root: {
     backgroundColor: purple[500],
@@ -39,55 +40,45 @@ const useStyles = makeStyles({
   },
 });
 
-const users = [
-  {
-    firstname: "Rice",
-    lastname: "Hello",
-    email: "xyz@gmail.com",
-    gender: "Female",
-    phone: "921243627",
-    faculty: "Science", 
-    
-  },
-  {
-  firstname: "Riyo",
-  lastname: "Hello",
-  email: "xyz@gmail.com",
-  gender: "Female",
-  phone: "921243627",
-  faculty: "Science", 
-  },
-];
-var values;
-var setValues;  
-var updated={};
-var user={};
+
 var checkupdate={};
 function BasicTable(){
+  let [users,setUsers]=useState([]);
    const classes = useStyles();
-   [values, setValues] = useState([...users]);
-   if(localStorage!=null){
-    user=JSON.parse(localStorage.getItem('details'));
-    updated=JSON.parse(localStorage.getItem('updated'));
-    console.log(updated);
-    users.push(user);
-   }
-    if(JSON.stringify(updated) !== JSON.stringify(checkupdate)){
-      let index=users.indexOf(checkupdate);
-       users.splice(index,1,updated);
-    }
+     
+     if(localStorage.getItem("users")){
+      users=JSON.parse(localStorage.getItem('users'));
+     }
+    //user=JSON.parse(localStorage.getItem('details'));
+    //users=JSON.parse(localStorage.getItem('users'));
+    //console.log('user',user);
+    //updated=JSON.parse(localStorage.getItem('updated'));
+    //console.log(updated);
+    //users.push(user);
+    console.log('users',users);
+
+   // if(JSON.stringify(updated) !== JSON.stringify(checkupdate)){
+     // let index=values.indexOf(checkupdate);
+    //   values.splice(index,1,updated);
+  //  }
+    
   // console.log(user);
    // console.log(values);
   
-  
 
-  const handleRemoveRow =  () => {
-    setValues(values.slice(0, -1));
+  const handleRemoveRow = detail =>() => {
+     let findUser= users.findIndex(value=>value.id===detail.id);
+     console.log(findUser);
+      users.splice(findUser,1);
+      console.log(users);
+      localStorage.setItem("users", JSON.stringify(users));
+      setUsers(users);
+  
+  //  setValues(users.slice(0, -1));
   };
 
   const handleUpdate= item=>() =>{
     checkupdate=item;
-    console.log(checkupdate);
     localStorage.setItem("update", JSON.stringify(item));
     history.push('/Update')
 };
@@ -109,7 +100,7 @@ function BasicTable(){
          </TableRow>
         </TableHead>
         <TableBody>
-        { values.map((detail,index) => (
+        { users.map((detail,index) => (
             <TableRow key={detail.name} >
               <TableCell align='center'>{index+1}  </TableCell>
               <TableCell align="center">{detail.firstname}</TableCell>
@@ -121,7 +112,7 @@ function BasicTable(){
               <TableCell align="center">
               <Fab color="primary" size='small' onClick={handleUpdate(detail)} > 
               <EditIcon style={{ fontSize: 15 }}/></Fab> &nbsp;&nbsp;|&nbsp;&nbsp;  
-              <Fab color="primary" aria-label="edit" size="small" onClick={handleRemoveRow}  >
+              <Fab color="primary" aria-label="edit" size="small" onClick={handleRemoveRow(detail)}  >
               <DeleteIcon style={{ fontSize: 15 }} />
               </Fab>
               </TableCell>

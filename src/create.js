@@ -11,8 +11,8 @@ import Radio from '@material-ui/core/Radio';
 import Button from '@material-ui/core/Button';
 import history from './history';
 import  { useEffect} from 'react';
-import { Update } from "@material-ui/icons";
-
+import { PersonalVideo, Update } from "@material-ui/icons";
+import uniqueRandom from 'unique-random';
 
 
 
@@ -41,20 +41,26 @@ import { Update } from "@material-ui/icons";
 
 
 export const Create= props => {
+     
     const classes = useStyles();
-    const initialInputState = { firstname: "",lastname: "",email: "",gender:"", phone: "", faculty:""};
+    const initialInputState = { id: "",firstname: "",lastname: "",email: "",gender:"", phone: "", faculty:""};
     const [eachEntry, setEachEntry] = useState(initialInputState);
-    const {firstname, lastname, email, gender, phone, faculty} = eachEntry;
+    const {id,firstname, lastname, email, gender, phone, faculty} = eachEntry;
+    const isEnabled = email.length > 0 && phone.length > 0 && firstname.length>0 && lastname.length>0 && gender.length>0;
     
-  
     const handleInputChange = e => {
-      setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
+      setEachEntry({ ...eachEntry, [e.target.name]: e.target.value, });
       
     };
-
+      const random= uniqueRandom(1, 10);
+      eachEntry.id=random();
         const onSubmitHandler = (e) => {
-         
-          localStorage.setItem("details", JSON.stringify(eachEntry));
+           let users=[];
+           if(localStorage.getItem("users")){
+            users=JSON.parse(localStorage.getItem('users'));
+           }
+           users.push(eachEntry);
+           localStorage.setItem("users", JSON.stringify(users));
           history.push('/');
         };
 
@@ -62,20 +68,20 @@ export const Create= props => {
       <Box className="Box-container" >
        <h1 className="App-heading" style={{paddingTop: '10px'}}>Create Information Form </h1> 
         <form >
-        <TextField className={classes.root} id="standard-basic" label="First Name" name="firstname" value={firstname} onChange={handleInputChange} />
-       <TextField className={classes.root} id="standard-basic" label="Last Name" name="lastname" value={lastname} onChange={handleInputChange}/>
+        <TextField className={classes.root} id="standard-basic" label="First Name" required='true' name="firstname" value={firstname} onChange={handleInputChange} />
+       <TextField className={classes.root} id="standard-basic" label="Last Name" required='true'  name="lastname" value={lastname} onChange={handleInputChange}/>
        <FormControl style={{paddingTop: '18px'}} className={classes.radio} component="fieldset">
-          <FormLabel className={classes.radio} style={{paddingTop: '12px'}}>Select Your Role: </FormLabel>
+          <FormLabel className={classes.radio} required='true' style={{paddingTop: '12px'}}>Select Your Role: </FormLabel>
           <RadioGroup  row aria-label="gender" name="gender" value={gender} onChange={handleInputChange} >
             <FormControlLabel  value="female" control={<Radio/>} label="Female" />
             <FormControlLabel value="male" control={<Radio/>} label="Male" />        
           </RadioGroup>
         </FormControl>
-        <TextField className={classes.root} id="standard-basic" label="Email" name="email" value={email} onChange={handleInputChange}/>
-        <TextField className={classes.root} id="standard-basic" label="Phone" name="phone" value={phone} onChange={handleInputChange}/>
+        <TextField className={classes.root} id="standard-basic" label="Email" required='true' name="email" value={email} onChange={handleInputChange}/>
+        <TextField className={classes.root} id="standard-basic" label="Phone" required='true' name="phone" value={phone} onChange={handleInputChange}/>
         <TextField className={classes.root} id="standard-basic" label="Faculty" name="faculty" value={faculty} onChange={handleInputChange}/>
         <br></br>
-        <Button  variant="contained"  style={{margin:'25px 10px 10px 16px'}} onClick={onSubmitHandler}>Submit</Button>
+        <Button disabled={!isEnabled}  variant="contained"  style={{margin:'25px 10px 10px 16px'}} onClick={onSubmitHandler}>Submit</Button>
        </form>
        </Box>
   );

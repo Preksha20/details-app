@@ -35,21 +35,32 @@ import  { useEffect,  } from 'react';
             flexDirection: 'row', 
           },   
      }));
-
-var user={};
+     var user={};
+   
 
 export const Update= props => {
         
+      const classes = useStyles();
+     
        user=JSON.parse(localStorage.getItem('update'));
-      console.log(user);
+      
       const [eachUpdate, setEachUpdate] = useState(user);
-        const {firstname, lastname, email, gender, phone, faculty} = eachUpdate;
-        const classes = useStyles();
-   
+      const {id,firstname, lastname, email, gender, phone, faculty} = eachUpdate;
        const onUpdateHandler = (e) => {
-        localStorage.setItem("updated", JSON.stringify(eachUpdate));
+        let users=[];   
+        if(localStorage.getItem("users")){
+         users=JSON.parse(localStorage.getItem('users'));  
+         console.log(users);
+        }
+        let findUser= users.findIndex(value=>value.id===user.id);
+        console.log(findUser);
+        if( findUser!==-1){
+          users[findUser]=eachUpdate;
+          localStorage.setItem("users", JSON.stringify(users));
+        }
            history.push('/');
         };
+
         const handleInputChange = e => {
             setEachUpdate({ ...eachUpdate, [e.target.name]: e.target.value });
             
