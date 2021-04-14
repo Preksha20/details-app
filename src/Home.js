@@ -13,7 +13,7 @@ import history from "./history";
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-
+import Headerpart from './headerpart';
 
 
 const ColorButton = withStyles(() => ({
@@ -43,7 +43,7 @@ const useStyles = makeStyles({
 
 var checkupdate={};
 function BasicTable(){
-  let [users,setUsers]=useState([]);
+  let [users,setUsers]=useState();
    const classes = useStyles();
      
      if(localStorage.getItem("users")){
@@ -129,7 +129,7 @@ class Home extends React.Component{
     render(){
         return (
           <div>
-            <h1 className='App-heading'>Student Information</h1>
+            <Headerpart></Headerpart>
             <ColorButton variant="contained" color="primary" onClick={() => history.push('/Create')}>
               Add Entry
             </ColorButton>
