@@ -46,11 +46,12 @@ export const Create= props => {
     const initialInputState = { id: "",firstname: "",lastname: "",email: "",gender:"", phone: "", faculty:""};
     const [eachEntry, setEachEntry] = useState(initialInputState);
     const {id,firstname, lastname, email, gender, phone, faculty} = eachEntry;
-    const isEnabled = email.length > 0 && phone.length > 0 && firstname.length>0 && lastname.length>0 && gender.length>0;
-    
+    var email_re = /^.+@.+..+/;
+    var email_validate=((email_re).test(email))? true: false;
+    const isEnabled = email.length > 0 && phone.length > 0 && firstname.length>0 && lastname.length>0 && gender.length>0 && email_validate;
+   
     const handleInputChange = e => {
       setEachEntry({ ...eachEntry, [e.target.name]: e.target.value, });
-      
     };
       const random= uniqueRandom(1, 10);
       eachEntry.id=random();
